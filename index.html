@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matías Jacob - Mi Cumpleaños 😎</title>
+
+    <!-- Configuración para la miniatura al compartir (Open Graph) -->
+    <meta property="og:title" content="Matías Jacob - Mi Cumpleaños 😎">
+    <meta property="og:description" content="¡Te espero para celebrar mi evento este 2026! No faltes.">
+    <meta property="og:image" content="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.29%20AM.jpeg?raw=true">
+    <meta property="og:url" content="https://matiasjacob2026.com">
+    <meta property="og:type" content="website">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;800&family=Bangers&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --accent: #00f2ff;
+            --pink: #ff0055;
+            --secondary: #222;
+            --text: #ffffff;
+            --card-bg: rgba(30, 30, 30, 0.9);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow: hidden;
+            background-image: url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
+        }
+
+        /* Barra de progreso */
+        #progress-bar {
+            position: fixed;
+            top: 0; left: 0; height: 4px;
+            background: linear-gradient(to right, var(--accent), var(--pink));
+            z-index: 3000;
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        /* --- PANTALLA DE ENTRADA --- */
+        .intro-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.8s cubic-bezier(0.8, 0, 0.2, 1);
+        }
+
+        .enter-btn {
+            padding: 20px 40px;
+            background: transparent;
+            border: 3px solid var(--accent);
+            color: var(--accent);
+            font-weight: 800;
+            font-size: 1.5rem;
+            cursor: pointer;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px var(--accent);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- CONTENIDO --- */
+        .main-wrapper {
+            opacity: 0;
+            transition: opacity 1s;
+            height: 100vh;
+            overflow-y: auto;
+            scroll-snap-type: y mandatory;
+            scrollbar-width: none;
+        }
+        .main-wrapper::-webkit-scrollbar { display: none; }
+
+        section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            scroll-snap-align: start;
+            position: relative;
+            text-align: center;
+            perspective: 1000px;
+        }
+
+        /* --- ESTILO PORTADA CON IMAGEN --- */
+        .hero-section {
+            background: 
+                linear-gradient(to bottom, rgba(10, 10, 10, 0.4), rgba(10, 10, 10, 0.9)),
+                url("https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.29%20AM.jpeg?raw=true");
+            background-size: cover;
+            background-position: center;
+            background-attachment: scroll;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px) scale(0.9);
+            transition: all 0.8s ease-out;
+        }
+        .active-section .reveal {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* --- TÍTULOS --- */
+        .hero-name {
+            font-family: 'Bangers', cursive;
+            font-size: clamp(60px, 18vw, 100px);
+            color: var(--accent);
+            margin: 0;
+            position: relative;
+            letter-spacing: 2px;
+            text-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+        }
+
+        .hero-last {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            font-size: clamp(30px, 10vw, 50px);
+            text-transform: uppercase;
+            margin-top: -15px;
+            background: #fff;
+            color: #000;
+            padding: 0 15px;
+            box-shadow: 10px 10px 0px var(--pink);
+        }
+
+        .label-modern {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--accent);
+            color: #000;
+            padding: 5px 15px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            clip-path: polygon(0 0, 100% 0, 90% 100%, 0% 100%);
+        }
+
+        /* --- FECHA PÁGINA --- */
+        .date-box {
+            border: 2px solid rgba(255,255,255,0.2);
+            padding: 50px 30px;
+            position: relative;
+            background: rgba(255,255,255,0.03);
+        }
+
+        .date-number {
+            font-size: clamp(100px, 25vw, 140px);
+            font-weight: 800;
+            line-height: 0.8;
+            margin: 0;
+            background: linear-gradient(to bottom, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .date-month {
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 12px;
+            margin-top: 10px;
+        }
+
+        /* --- GALERÍA --- */
+        .gallery-title {
+            font-family: 'Bangers', cursive;
+            font-size: 32px;
+            color: #fff;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px var(--pink);
+        }
+
+        .gallery-container {
+            width: 100%;
+            max-width: 320px;
+            height: 420px;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .gallery-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0; left: 0;
+            border: 8px solid #fff;
+            border-bottom-width: 45px;
+            opacity: 0;
+            transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: rotateY(-10deg) scale(0.9);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+
+        .gallery-container img.active {
+            opacity: 1;
+            transform: rotateY(0deg) scale(1);
+            z-index: 10;
+            pointer-events: auto;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .ctrl-btn {
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 10px 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* --- INFO CARD --- */
+        .info-card {
+            background: var(--card-bg);
+            padding: 35px;
+            width: 100%;
+            max-width: 360px;
+            border-top: 5px solid var(--accent);
+            border-right: 5px solid var(--pink);
+            text-align: left;
+            backdrop-filter: blur(10px);
+        }
+
+        .timer-label {
+            font-family: 'Bangers', cursive;
+            font-size: 45px;
+            color: var(--pink);
+            letter-spacing: 5px;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .timer {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .t-unit {
+            background: #000;
+            padding: 10px;
+            width: 75px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .t-val { font-size: 26px; font-weight: 800; color: var(--accent); display: block; }
+        .t-lab { font-size: 9px; text-transform: uppercase; opacity: 0.5; }
+
+        .btn-link {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-top: 15px;
+            text-decoration: none;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .btn-maps { background: var(--accent); color: #000; }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="progress-bar"></div>
+    <canvas id="bg-canvas"></canvas>
+
+    <audio id="music" loop>
+        <source src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Audio%202026-04-09%20at%206.11.01%20PM.mp4?raw=true" type="audio/mp4">
+    </audio>
+
+    <div class="intro-overlay" id="intro">
+        <button class="enter-btn" id="openBtn">INGRESAR</button>
+    </div>
+
+    <div class="main-wrapper" id="mainWrapper">
+        
+        <!-- PORTADA -->
+        <section class="active-section hero-section">
+            <div class="reveal">
+                <div class="label-modern">ESTÁ PASANDO // 2026</div>
+                <h1 class="hero-name">Matías</h1>
+                <div class="hero-last">Jacob</div>
+                <p style="margin-top: 50px; font-family: 'JetBrains Mono'; color: var(--accent); text-shadow: 2px 2px 4px #000;">▼ DESLIZA PARA VER ▼</p>
+            </div>
+        </section>
+
+        <!-- FECHA -->
+        <section>
+            <div class="reveal date-box">
+                <p style="position: absolute; top: -12px; left: 20px; background: #0a0a0a; padding: 0 10px; font-weight: bold; color: var(--accent);">CUÁNDO</p>
+                <h2 class="date-number">02</h2>
+                <div class="date-month">AGOSTO</div>
+                <p style="margin-top: 20px; font-weight: 300; letter-spacing: 5px; opacity: 0.8;">SÁBADO · 19:00 HRS</p>
+            </div>
+        </section>
+
+        <!-- GALERÍA (27 FOTOS) -->
+        <section>
+            <div class="reveal" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+                <h2 class="gallery-title">Mis mejores momentos</h2>
+                <div class="gallery-container">
+                    <img class="active" src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.45.07%20AM.jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.53%20AM.jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.45.04%20AM%20(1).jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.45.03%20AM.jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.45.05%20AM.jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.45.03%20AM%20(2).jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.58%20AM%20(1).jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.57%20AM.jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.52%20AM.jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.48%20AM.jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.47%20AM.jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.59%20AM%20(1).jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.45.08%20AM.jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.45.04%20AM.jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.45.00%20AM%20(2).jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.45.00%20AM%20(1).jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.59%20AM.jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.59%20AM%20(4).jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.59%20AM%20(3).jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.59%20AM%20(2).jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.58%20AM.jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.57%20AM%20(1).jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.54%20AM.jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.50%20AM.jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.49%20AM.jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.48%20AM%20(1).jpeg?raw=true">
+                    <img src="https://github.com/regina1503/xv-hombre/blob/main/WhatsApp%20Image%202026-04-13%20at%2010.44.53%20AM.jpeg?raw=true">
+                </div>
+                <div class="controls">
+                    <button class="ctrl-btn" id="prev">←</button>
+                    <span id="counter" style="font-family: 'JetBrains Mono'; font-size: 14px; display: flex; align-items: center;">01 / 27</span>
+                    <button class="ctrl-btn" id="next">→</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- UBICACIÓN -->
+        <section>
+            <div class="reveal info-card">
+                <p style="font-weight: 800; color: var(--accent); margin: 0; font-family: 'JetBrains Mono';">EL SPOT:</p>
+                <h3 style="font-size: 26px; margin: 10px 0;">Terraza La Abundancia</h3>
+                <p style="opacity: 0.7; font-size: 14px; margin-bottom: 25px;">Calle Falsa 123, Santa Anita, Jalisco.</p>
+                
+                <a href="https://maps.app.goo.gl/uF5jUaQkCqYy6R6P9" target="_blank" class="btn-link btn-maps">VER UBICACIÓN</a>
+
+                <div class="timer-label" style="margin-top: 40px;">FALTAN</div>
+                <div class="timer">
+                    <div class="t-unit"><span class="t-val" id="d">00</span><span class="t-lab">Días</span></div>
+                    <div class="t-unit"><span class="t-val" id="h">00</span><span class="t-lab">Hrs</span></div>
+                    <div class="t-unit"><span class="t-val" id="m">00</span><span class="t-lab">Min</span></div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        const openBtn = document.getElementById('openBtn');
+        const intro = document.getElementById('intro');
+        const mainWrapper = document.getElementById('mainWrapper');
+        const music = document.getElementById('music');
+        const progressBar = document.getElementById('progress-bar');
+
+        openBtn.addEventListener('click', () => {
+            intro.style.transform = 'translateY(-100%)';
+            mainWrapper.style.opacity = '1';
+            music.play().catch(e => console.log("Audio play blocked"));
+        });
+
+        mainWrapper.addEventListener('scroll', () => {
+            const scroll = mainWrapper.scrollTop;
+            const height = mainWrapper.scrollHeight - mainWrapper.clientHeight;
+            const percentage = (scroll / height) * 100;
+            progressBar.style.width = percentage + '%';
+
+            document.querySelectorAll('section').forEach(sec => {
+                const rect = sec.getBoundingClientRect();
+                if (rect.top >= 0 && rect.top < window.innerHeight / 2) {
+                    sec.classList.add('active-section');
+                } else {
+                    sec.classList.remove('active-section');
+                }
+            });
+        });
+
+        // Galería
+        const images = document.querySelectorAll('.gallery-container img');
+        const counter = document.getElementById('counter');
+        let currentIdx = 0;
+
+        function updateGallery() {
+            images.forEach(img => img.classList.remove('active'));
+            images[currentIdx].classList.add('active');
+            counter.innerText = `${(currentIdx + 1).toString().padStart(2, '0')} / ${images.length.toString().padStart(2, '0')}`;
+        }
+
+        document.getElementById('next').onclick = () => {
+            currentIdx = (currentIdx + 1) % images.length;
+            updateGallery();
+        };
+
+        document.getElementById('prev').onclick = () => {
+            currentIdx = (currentIdx - 1 + images.length) % images.length;
+            updateGallery();
+        };
+
+        // Contador
+        const target = new Date("August 2, 2026 19:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const gap = target - now;
+            const d = Math.max(0, Math.floor(gap / (1000 * 60 * 60 * 24)));
+            const h = Math.max(0, Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+            const m = Math.max(0, Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60)));
+            
+            document.getElementById('d').innerText = d.toString().padStart(2, '0');
+            document.getElementById('h').innerText = h.toString().padStart(2, '0');
+            document.getElementById('m').innerText = m.toString().padStart(2, '0');
+        }, 1000);
+
+        // Fondo animado de partículas
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.speedY = Math.random() * 0.5 + 0.1;
+                this.opacity = Math.random() * 0.4;
+            }
+            update() {
+                this.y -= this.speedY;
+                if (this.y < 0) this.reset();
+            }
+            draw() {
+                ctx.fillStyle = `rgba(0, 242, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for(let i=0; i<60; i++) particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+
+        window.onresize = resize;
+        resize();
+        initParticles();
+        animate();
+    </script>
+</body>
+</html>
